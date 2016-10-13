@@ -7,14 +7,13 @@ Authors: Joel Burton, Christian Fernandez, Meggie Mahnken, Katie Byers.
 """
 
 
-from flask import Flask, render_template, redirect, flash
+from flask import Flask, render_template, redirect, flash, session
 import jinja2
 
 import melons
 
 
 app = Flask(__name__)
-
 # A secret key is needed to use Flask sessioning features
 
 app.secret_key = 'this-should-be-something-unguessable'
@@ -89,6 +88,14 @@ def add_to_cart(melon_id):
     page and display a confirmation message: 'Melon successfully added to
     cart'."""
 
+    # print "\n\n session: ", session, "\n\n"
+    if "cart" not in session:
+        session["cart"] = {}
+        # print session["cart"]
+    session["cart"][melon_id] = session["cart"].get(melon_id,0) + 1
+    # print session["cart"]
+    print "\n\n", session["cart"].items(), "\n\n"
+
     # TODO: Finish shopping cart functionality
 
     # The logic here should be something like:
@@ -99,9 +106,9 @@ def add_to_cart(melon_id):
     # - increment the count for that melon id by 1
     # - flash a success message
     # - redirect the user to the cart page
+    # return redirect('/cart')
 
-    return "Oops! This needs to be implemented!"
-
+    return render_template("cart.html")
 
 @app.route("/login", methods=["GET"])
 def show_login():
